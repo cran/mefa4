@@ -1,0 +1,24 @@
+MEFA4 VERSIONS
+
+Version 0.2-0 -- February 7, 2011
+    * First public CRAN release.
+
+Version 0.1-2 -- January 26, 2011
+    * nonDuplicated function added.
+    * segmented Xtab output implemnted
+      as list of sparse matrices.
+
+Version 0.1-1 -- January 25, 2011
+    * S4 classes working properly.
+    * /tests dir added to pkg tree.
+    * Xtab class is redundant, 
+      use dgCMatrix class instead.
+    * A vignette with design decisions
+      added, it also has the performance
+      comparison.
+    * mbind method for binding matrices
+      added with a 'left join' implementation.
+    * Rd files added, needs proofreading.
+
+Version 0.1-0 -- January 20, 2011
+    * Start development for S4 classes.
