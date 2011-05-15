@@ -1,8 +1,8 @@
 Package: mefa4
 Type: Package
 Title: Multivariate Data Handling with S4 Classes and Sparse Matrices
-Version: 0.2-0
-Date: 2011-02-07
+Version: 0.2-1
+Date: 2011-02-14
 Author: Peter Solymos
 Maintainer: Peter Solymos <solymos@ualberta.ca>
 Description: An S4 update of the 'mefa' package using sparse matrices
@@ -14,6 +14,6 @@ License: GPL-2
 URL: http://mefa.r-forge.r-project.org/
 LazyLoad: yes
 LazyData: true
-Packaged: 2011-02-10 07:07:29 UTC; localadmin
+Packaged: 2011-05-14 14:36:19 UTC; localadmin
 Repository: CRAN
-Date/Publication: 2011-02-10 08:42:02
+Date/Publication: 2011-05-15 07:29:44
