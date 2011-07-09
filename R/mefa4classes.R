@@ -91,6 +91,8 @@ subset, na.action, exclude = c(NA, NaN), drop.unused.levels = FALSE)
     cl <- levels(cols)
     if (is.null(y)) 
         y <- rep.int(1, length(rows))
+    if (!is.numeric(y))
+        stop("lhs of formula not numeric")
     ## this is how it is constructed, then converted into dgCMatrix
     out <- as(new("dgTMatrix", 
         i = as.integer(rows) - 1L, 
@@ -176,13 +178,13 @@ join = c("left", "inner"), drop = FALSE) {
         ckeep <- if (!is.null(taxa))
             intersect(xcid, tid) else xcid
     }
-    xtab <- xtab[rkeep, ckeep]
+    xtab <- xtab[rkeep, ckeep, drop=FALSE]
     if (!is.null(samp)) {
-        samp <- samp[rkeep,]
+        samp <- samp[rkeep,,drop=FALSE]
         rownames(samp) <- rkeep
     }
     if (!is.null(taxa)) {
-        taxa <- taxa[ckeep,]
+        taxa <- taxa[ckeep,,drop=FALSE]
         rownames(taxa) <- ckeep
     }
     if (drop) {
