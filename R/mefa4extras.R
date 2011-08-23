@@ -1,3 +1,7 @@
+## TODO: mbind for matrix cound use sparse matrix code
+## check for necessity of [,,drop=FALSE] in mbind for 1x cases
+## check problem with merge for samp/taxa
+
 ## groupSums and groupMeans
 
 setGeneric("groupSums", function(object, ...) standardGeneric("groupSums"))
@@ -223,38 +227,46 @@ setMethod("mbind", signature(x="Mefa", y="Mefa", fill="ANY"),
         if (is.null(sampx) && is.null(sampy))
             sm2 <- NULL
         if (!is.null(sampx) && !is.null(sampy)) {
-            sampx2 <- data.frame(ROWNAMES=rownames(sampx), SAMPPART=1, sampx)
-            sampy2 <- data.frame(ROWNAMES=rownames(sampy), SAMPPART=2, sampy)
-            sm <- merge(sampx2, sampy2, all=TRUE)
+            sampx2 <- data.frame(ROWNAMES=rownames(sampx), SAMPPART=1, sampx[,,drop=FALSE])
+            sampy2 <- data.frame(ROWNAMES=rownames(sampy), SAMPPART=2, sampy[,,drop=FALSE])
+            saa <- intersect(names(sampy2), names(sampx2))
+            sbb <- c(saa, setdiff(names(sampx2), names(sampy2)))
+            sm <- merge(sampx2[,sbb], sampy2[,saa], all=TRUE)
             sid1 <- which(sm$SAMPPART==1 & sm$ROWNAMES %in% r1)
             sid2 <- which(sm$SAMPPART==2 & sm$ROWNAMES %in% ry)
             sm2 <- sm[c(sid1, sid2),]
             rownames(sm2) <- sm2$ROWNAMES
+            scc <- setdiff(names(sampy), names(sampx))
+            sm2 <- data.frame(sm2, sampy[rownames(sm2),scc,drop=FALSE])
             sm2$ROWNAMES <- sm2$SAMPPART <- NULL
         }
         if (!is.null(sampx) && is.null(sampy))
             sm2 <- sampx
         if (is.null(sampx) && !is.null(sampy))
-            sm2 <- sampy[ry,]
+            sm2 <- sampy[c(r1,ry),]
         ## taxa
         taxax <- x@taxa
         taxay <- y@taxa
         if (is.null(taxax) && is.null(taxay))
             tm2 <- NULL
         if (!is.null(taxax) && !is.null(taxay)) {
-            taxax2 <- data.frame(ROWNAMES=rownames(taxax), TAXAPART=1, taxax)
-            taxay2 <- data.frame(ROWNAMES=rownames(taxay), TAXAPART=2, taxay)
-            tm <- merge(taxax2, taxay2, all=TRUE)
+            taxax2 <- data.frame(ROWNAMES=rownames(taxax), TAXAPART=1, taxax[,,drop=FALSE])
+            taxay2 <- data.frame(ROWNAMES=rownames(taxay), TAXAPART=2, taxay[,,drop=FALSE])
+            taa <- intersect(names(taxay2), names(taxax2))
+            tbb <- c(taa, setdiff(names(taxax2), names(taxay2)))
+            tm <- merge(taxax2[,tbb], taxay2[,taa], all=TRUE)
             tid1 <- which(tm$TAXAPART==1 & tm$ROWNAMES %in% c1)
             tid2 <- which(tm$TAXAPART==2 & tm$ROWNAMES %in% cy)
             tm2 <- tm[c(tid1, tid2),]
             rownames(tm2) <- tm2$ROWNAMES
-            tm2$ROWNAMES <- tm2$taxaPART <- NULL
+            tcc <- setdiff(names(taxay), names(taxax))
+            tm2 <- data.frame(tm2, taxay[rownames(tm2),tcc,drop=FALSE])
+            tm2$ROWNAMES <- tm2$TAXAPART <- NULL
         }
         if (!is.null(taxax) && is.null(taxay))
             tm2 <- taxax
         if (is.null(taxax) && !is.null(taxay))
-            tm2 <- taxay[cy,]
+            tm2 <- taxay[c(c1,cy),]
         ## assembling
         Mefa(part5, sm2, tm2, join="left", drop)
 })
