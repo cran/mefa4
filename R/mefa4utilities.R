@@ -32,6 +32,10 @@ function(x)
     if (inherits(x, "matrix"))
         x <- as(x, "dgCMatrix")
     if (inherits(x, "sparseMatrix")) {
+        if (is.null(rownames(x)))
+            stop("missing row names")
+        if (is.null(colnames(x)))
+            stop("missing column names")
         x <- as(x, "dgTMatrix")
         rows <- x@i + 1L
         cols <- x@j + 1L
@@ -102,3 +106,46 @@ function(x, capitalize=c("asis", "first", "none", "all", "mixed"), collapse=" ")
     }, USE.NAMES = !is.null(names(x)))
 }
 
+## compare sets
+compare_sets <- function(x, y) {
+    x <- as.factor(x)
+    y <- as.factor(y)
+    xl <- levels(x)
+    yl <- levels(y)
+    xa <- levels(droplevels(x))
+    ya <- levels(droplevels(y))
+    lab <- c(xlength=length(xl), ylength=length(yl),
+        intersect=length(intersect(xl, yl)),
+        union=length(union(xl, yl)),
+        xbutnoty=length(setdiff(xl, yl)),
+        ybutnotx=length(setdiff(yl, xl)))
+    act <- c(xlength=length(xa), ylength=length(ya),
+        intersect=length(intersect(xa, ya)),
+        union=length(union(xa, ya)),
+        xbutnoty=length(setdiff(xa, ya)),
+        ybutnotx=length(setdiff(ya, xa)))
+    rbind(labels=lab, unique=act)
+}
+
+## find max/min index and value for rows of a matrix
+find_max <- function(x) {
+    if (is.null(dim(x))) 
+        stop("x must be matrix like object with dim attribute")
+    if (is.null(colnames(x))) 
+        colnames(x) <- paste0("X", seq_len(ncol(x)))
+    tmp <- pbapply(x, 1, function(z) {
+        i <- which.max(z)
+        if (length(i))
+            c(i, z[i]) else c(NA, NA)
+    })
+    i <- factor(tmp[1, ], levels = seq_len(ncol(x)))
+    levels(i) <- colnames(x)
+    out <- data.frame(index = i, value = tmp[2, ])
+    rownames(out) <- rownames(x)
+    out
+}
+find_min <- function(x) {
+    out <- find_max(-1 * x)
+    out$value <- -1 * out$value
+    out
+}
