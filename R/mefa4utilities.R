@@ -40,14 +40,14 @@ function(x)
         rows <- x@i + 1L
         cols <- x@j + 1L
         y <- x@x
-        out <- data.frame(rows = factor(x@Dimnames[[1]][rows], 
-            levels=x@Dimnames[[1]]), 
-            cols = factor(x@Dimnames[[2]][cols], 
-            levels=x@Dimnames[[2]]), 
+        out <- data.frame(rows = factor(x@Dimnames[[1]][rows],
+            levels=x@Dimnames[[1]]),
+            cols = factor(x@Dimnames[[2]][cols],
+            levels=x@Dimnames[[2]]),
             value = y)
-    } else if (is.list(x) && all(sapply(x, function(z) 
+    } else if (is.list(x) && all(sapply(x, function(z)
         inherits(z, "sparseMatrix")))) {
-        if (!all(sapply(x[-1], function(z) 
+        if (!all(sapply(x[-1], function(z)
             identical(z@Dimnames, x[[1]]@Dimnames))))
             stop("dimnames of list elements must be identical")
         n <- length(x)
@@ -58,10 +58,10 @@ function(x)
             cols[[k]] <- X[[k]]@j + 1L
             y[[k]] <- X[[k]]@x
         }
-        out <- data.frame(rows = factor(x[[1]]@Dimnames[[1]][unlist(rows)], 
-            levels=x[[1]]@Dimnames[[1]]), 
-            cols = factor(x[[1]]@Dimnames[[2]][unlist(cols)], 
-            levels=x[[1]]@Dimnames[[2]]), 
+        out <- data.frame(rows = factor(x[[1]]@Dimnames[[1]][unlist(rows)],
+            levels=x[[1]]@Dimnames[[1]]),
+            cols = factor(x[[1]]@Dimnames[[2]][unlist(cols)],
+            levels=x[[1]]@Dimnames[[2]]),
             segm = as.factor(rep(names(x), sapply(y, length))),
             value = unlist(y))
     } else stop("object class not appropriate")
@@ -69,21 +69,21 @@ function(x)
 }
 
 ## atatch a time stamp to file names etc.
-pasteDate <- 
+pasteDate <-
 function(..., sep = " ", collapse = NULL, sep.date = sep)
 {
     out <- paste(..., sep = sep, collapse = collapse)
     paste(out, Sys.Date(), sep = sep.date)
 }
-paste0date <- 
+paste0date <-
 function(..., collapse = NULL)
 {
     paste0(paste0(..., collapse = collapse), Sys.Date())
 }
 
 ## clear up species names
-nameAlnum <- 
-function(x, capitalize=c("asis", "first", "none", "all", "mixed"), collapse=" ") 
+nameAlnum <-
+function(x, capitalize=c("asis", "first", "none", "all", "mixed"), collapse=" ")
 {
     capitalize <- match.arg(capitalize)
     .capwords <- function(x) {
@@ -97,13 +97,39 @@ function(x, capitalize=c("asis", "first", "none", "all", "mixed"), collapse=" ")
         capitalize <- "mixed"
     }
     f <- switch(capitalize,
-        "asis"=function(x) return(x), 
-        "mixed"=capwords, 
-        "none"=tolower, 
+        "asis"=function(x) return(x),
+        "mixed"=capwords,
+        "none"=tolower,
         "all"=toupper)
     sapply(x, function(z) {
         paste0(f(strsplit(gsub("[^[:alnum:] ]", "", z), " +")[[1]]), collapse=collapse)
     }, USE.NAMES = !is.null(names(x)))
+}
+
+normalizeNames <-
+function(x, pattern=list(" "), replacement=list("_"), alnum = FALSE, ...)
+{
+    if (!is.factor(x))
+        x <- as.character(x)
+    l0 <- if (is.factor(x))
+        levels(x) else unique(x)
+    l <- l0
+    if (length(pattern) != length(replacement))
+        stop("pattern and replacement lengths must be equal")
+    pattern <- as.list(pattern)
+    replacement <- as.list(replacement)
+    for (i in seq_len(length(pattern))) {
+        l <- gsub(as.character(pattern[[i]]), as.character(replacement[[i]]),
+            l, fixed=TRUE)
+    }
+    if (alnum)
+        l <- nameAlnum(l, ...)
+    if (is.factor(x)) {
+        levels(x) <- l
+    } else {
+        x <- l[match(x, l0)]
+    }
+    x
 }
 
 ## compare sets
@@ -129,9 +155,9 @@ compare_sets <- function(x, y) {
 
 ## find max/min index and value for rows of a matrix
 find_max <- function(x) {
-    if (is.null(dim(x))) 
+    if (is.null(dim(x)))
         stop("x must be matrix like object with dim attribute")
-    if (is.null(colnames(x))) 
+    if (is.null(colnames(x)))
         colnames(x) <- paste0("X", seq_len(ncol(x)))
     tmp <- pbapply(x, 1, function(z) {
         i <- which.max(z)
@@ -149,3 +175,52 @@ find_min <- function(x) {
     out$value <- -1 * out$value
     out
 }
+
+"%notin%" <- function(x, table) !(match(x, table, nomatch = 0) > 0)
+
+reclass <- function (x, map, all = FALSE) {
+    if (is.null(dim(map)))
+        stop("map argument must be matrix-like object")
+    if (ncol(map) != 2L)
+        stop("map must have 2 columns")
+    if (!is.factor(x))
+        x <- as.factor(x)
+    if (any(is.na(map)))
+        stop("NA found in map")
+    map <- as.matrix(map)
+    if (storage.mode(map) != "character")
+        storage.mode(map) <- "character"
+    if (any(duplicated(map[,1L])))
+        stop("values in 1st column in map must be unique")
+    if (any(!(levels(x) %in% map[,1L])))
+        stop("levels of x must be all part of map[,1]")
+    if (all)
+        levels(x) <- c(levels(x), setdiff(map[,1L], levels(x)))
+    levels(x) <- map[match(levels(x), map[,1L]),2]
+    x
+}
+
+redistribute <- function(x, source, target=NULL) {
+    if (is.null(dim(x)) || length(dim(x)) != 2L)
+        stop("x must have 2 dimensions")
+    if (any(x < 0))
+        warning("negative values in x: results might not be meaningful")
+    i <- if (is.numeric(source))
+        source else which(colnames(x) == source)
+    if (is.null(target)) {
+        target <- seq_len(ncol(x))
+        target <- target[target != i]
+    }
+    j <- if (is.numeric(target))
+        target else match(target, colnames(x))
+    if (any(is.na(j)))
+        stop("target must not lead to NA column indices")
+    if (i %in% j)
+        stop("source must not be part of target")
+    m <- x[,j,drop=FALSE]
+    x[,j] <- m + x[,i] * m / rowSums(m)
+    x[,i] <- 0
+    x
+}
+
+
