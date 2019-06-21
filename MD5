@@ -1,12 +1,12 @@
-f404f514cedddccbc743a1bba78f0d58 *DESCRIPTION
-e54698575eaad7ea01d7eaf230da7790 *NAMESPACE
+426be5c3933950c20fc53b191bc221aa *DESCRIPTION
+4ebb8aef0f6e3e615df204b92c304924 *NAMESPACE
 bfc5bde387da0657b9ceb4123a859599 *R/00mefa4classes.R
 29aed52a4b844189fb1d3fe847960a9e *R/00mefa4methods.R
 77ae253ce3786b7724757503846565cc *R/Mefa.R
 01fa8be5757e1be445e6f6232498b996 *R/Melt.R
 b86a643a904ce3b8d00939bff27243c2 *R/Xtab.R
 abf7e46a1eeaf6246095bdb0ad769149 *R/compare_sets.R
-2f9276eec93cb40c2f3ea77d5c4c27d8 *R/find_max.R
+c3d6ab44c3404847584a13ff011a4aad *R/find_max.R
 54c86d4499c3224d7cf8a5576345d1b6 *R/find_min.R
 16fde7e8424bde04e8fdcbe74d14de80 *R/groupMeans.R
 655f55482cd7f86f0b408c9d4d995f9c *R/groupSums.R
@@ -39,3 +39,5 @@ fb2b1581179b57a19d1d5db974d6c8f7 *man/nameAlnum.Rd
 07fbed9fb27b69ea22ba836220238987 *man/notin.Rd
 b30b6469b1232657f18c5989642bb528 *man/r2rmd.Rd
 b696be7febf274e8780f0949d4ea3ca8 *man/samp.Rd
+61e02f6e6d1a15b4341e320458e572f7 *tests/mefa4comparisons.R
+b1c5f0184a481ea6d08832db5ea4fd9a *tests/mefa4examples.R
