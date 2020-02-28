@@ -15,8 +15,11 @@ redistribute <- function(x, source, target=NULL) {
         stop("target must not lead to NA column indices")
     if (i %in% j)
         stop("source must not be part of target")
-    m <- x[,j,drop=FALSE]
-    x[,j] <- m + x[,i] * m / rowSums(m)
-    x[,i] <- 0
+    m <- x[, j, drop = FALSE]
+    rs <- rowSums(m)
+    rs[rs == 0] <- 1
+    rs[is.na(rs)] <- 1
+    x[, j] <- m + x[, i] * m/rs
+    x[, i] <- 0
     x
 }
