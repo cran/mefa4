@@ -5,6 +5,11 @@
     invisible(NULL)
 }
 
+.onLoad <- function(libname, pkgname) {
+    #options(Matrix.warnDeprecatedCoerce = 2L)
+    invisible(NULL)
+}
+
 .onUnload <- function(libpath){
     invisible(NULL)
 }
