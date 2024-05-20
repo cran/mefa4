@@ -1,4 +1,4 @@
-985127b27e6dc49fca5b564601f5962a *DESCRIPTION
+7698530863951d4dc044f6ddc04bd50a *DESCRIPTION
 4ebb8aef0f6e3e615df204b92c304924 *NAMESPACE
 4806bfb3276271350e4a7a30fb8b1c24 *R/00mefa4classes.R
 500ed19e7178e382d6799fcb0cac7fb8 *R/00mefa4methods.R
@@ -23,9 +23,10 @@ c55291d3875403dbed9018db978cd409 *R/notin.R
 38709a9a9ed026f9957954ca58eb0520 *R/redistribute.R
 bfee0f43083a071bf3831b128725ce77 *R/sum_by.R
 f10e028a17041beff612e6a6f30c428a *R/zzz.R
-d85895dd3bed29358c4be75861e936a3 *build/partial.rdb
+f61db891eb928123aba4412ca322f508 *build/partial.rdb
 e2603a5d6fcb659804d1a91ef11064e5 *data/abmibirds.rda
-d9f341072dab8d16a7532dd41bb365a4 *inst/CITATION
+319e795561c0990407e847145be17306 *inst/CITATION
+457eb4e3071fdcd0b75623ff0f5feaa8 *inst/WORDLIST
 5d1bf0e6c6eaa19288177f64a840fcfc *inst/r2rmd_example.R
 730381a1c756069d548083bb578cc904 *man/Mefa.Rd
 3be360d14d0a4f7054c166590cbfd364 *man/Melt.Rd
@@ -38,7 +39,7 @@ cf983eca3e384b980e4ecdc69aaee911 *man/groupSums.Rd
 b214520afa0f1f79970cd630f4191f37 *man/nameAlnum.Rd
 7cdfbd6fbd3e88757c983f2995d29f16 *man/nonDuplicated.Rd
 07fbed9fb27b69ea22ba836220238987 *man/notin.Rd
-5f6d836b313c2d66b8c3b40baf214df4 *man/r2rmd.Rd
+1542c0ded7b5a3357cae63b41f1a8adb *man/r2rmd.Rd
 98a35815e722139cf8cc65da876e219e *man/samp.Rd
 61e02f6e6d1a15b4341e320458e572f7 *tests/mefa4comparisons.R
 8c3fc5fea2d2177d2807ed5de936ce11 *tests/mefa4examples.R
