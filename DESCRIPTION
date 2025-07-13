@@ -1,9 +1,14 @@
 Package: mefa4
 Type: Package
 Title: Multivariate Data Handling with S4 Classes and Sparse Matrices
-Version: 0.3-11
-Date: 2024-05-20
-Author: Peter Solymos
+Version: 0.3-12
+Date: 2025-07-12
+Authors@R: 
+    c(person(given = "Peter",
+             family = "Solymos",
+             comment = c(ORCID = "0000-0001-7337-1740"),
+             role = c("aut", "cre"),
+             email = "psolymos@gmail.com"))
 Maintainer: Peter Solymos <psolymos@gmail.com>
 Description: An S4 update of the 'mefa' package
   using sparse matrices for enhanced efficiency.
@@ -17,6 +22,8 @@ BugReports: https://github.com/psolymos/mefa4/issues
 LazyLoad: yes
 LazyData: true
 NeedsCompilation: no
-Packaged: 2024-05-20 05:25:09 UTC; Peter
+Packaged: 2025-07-13 22:05:46 UTC; Peter
+Author: Peter Solymos [aut, cre] (ORCID:
+    <https://orcid.org/0000-0001-7337-1740>)
 Repository: CRAN
-Date/Publication: 2024-05-20 12:30:06 UTC
+Date/Publication: 2025-07-13 23:10:06 UTC
